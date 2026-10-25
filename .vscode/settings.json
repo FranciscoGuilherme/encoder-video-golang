@@ -8,6 +8,7 @@
     "infra",
     "config",
     "domain",
-    "project"
+    "project",
+    "application"
   ]
 }
