@@ -10,6 +10,7 @@ import (
 	"os/exec"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 type VideoService struct {
@@ -22,11 +23,22 @@ func NewVideoService() VideoService {
 }
 
 func (v *VideoService) Download(bucketName string) error {
+	var err error
+	var client *storage.Client
+
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
-	if err != nil {
-		return err
+	if os.Getenv("STORAGE_EMULATOR_HOST") != "" {
+		client, err = storage.NewClient(ctx, option.WithoutAuthentication(), storage.WithJSONReads())
+		if err != nil {
+			return err
+		}
+	} else {
+		client, err = storage.NewClient(ctx)
+		if err != nil {
+			return err
+		}
 	}
+	defer client.Close()
 
 	bkt := client.Bucket(bucketName)
 	obj := bkt.Object(v.Video.FilePath)
