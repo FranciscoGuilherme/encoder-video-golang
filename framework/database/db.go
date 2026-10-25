@@ -24,13 +24,13 @@ func NewDb() *Database {
 	return &Database{}
 }
 
-func NewDbTest() *gorm.DB {
+func NewDbTest(debug bool) *gorm.DB {
 	dbInstance := NewDb()
 	dbInstance.Env = "test"
 	dbInstance.DbTypeTest = "sqlite3"
 	dbInstance.DsnTest = ":memory:"
 	dbInstance.AutoMigrateDb = true
-	dbInstance.Debug = true
+	dbInstance.Debug = debug
 
 	connection, err := dbInstance.Connect()
 	if err != nil {
@@ -43,7 +43,7 @@ func NewDbTest() *gorm.DB {
 func (d *Database) Connect() (*gorm.DB, error) {
 	var err error
 
-	if d.Env != "Test" {
+	if d.Env != "test" {
 		d.Db, err = gorm.Open(d.DbType, d.Dsn)
 	} else {
 		d.Db, err = gorm.Open(d.DbTypeTest, d.DsnTest)
@@ -58,8 +58,17 @@ func (d *Database) Connect() (*gorm.DB, error) {
 	}
 
 	if d.AutoMigrateDb {
-		d.Db.AutoMigrate(&domain.Video{}, &domain.Job{})
-		d.Db.Model(domain.Job{}).AddForeignKey("video_id", "videos (id)", "CASCADE", "CASCADE")
+		migration := d.Db.AutoMigrate(&domain.Video{}, &domain.Job{})
+		if migration.Error != nil {
+			return nil, migration.Error
+		}
+
+		if d.Db.Dialect().GetName() != "sqlite3" {
+			foreignKey := d.Db.Model(domain.Job{}).AddForeignKey("video_id", "videos (id)", "CASCADE", "CASCADE")
+			if foreignKey.Error != nil {
+				return nil, foreignKey.Error
+			}
+		}
 	}
 
 	return d.Db, nil
