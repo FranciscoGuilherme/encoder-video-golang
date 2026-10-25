@@ -3,5 +3,11 @@
     "editor.tabSize": 4,
     "editor.insertSpaces": false,
     "editor.detectIndentation": false
-  }
+  },
+  "conventionalCommits.scopes": [
+    "infra",
+    "config",
+    "domain",
+    "project"
+  ]
 }
