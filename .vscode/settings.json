@@ -1,11 +1,16 @@
 {
+  "go.testEnvVars": {
+    "PATH": "/usr/local/bin/bento4:/home/user/.asdf/bin:/home/user/.asdf/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  },
   "[go]": {
     "editor.tabSize": 4,
     "editor.insertSpaces": false,
     "editor.detectIndentation": false
   },
   "conventionalCommits.scopes": [
+    "docs",
     "infra",
+    "build",
     "config",
     "domain",
     "project",
