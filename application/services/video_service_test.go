@@ -53,9 +53,9 @@ func (s *VideoServiceTestSuit) TestVideoServiceDownload() {
 	err = videoService.Fragment()
 	s.Require().Nil(err)
 
-	//err = videoService.Encode()
-	//s.Require().Nil(err)
+	err = videoService.Encode()
+	s.Require().Nil(err)
 
-	//err = videoService.Finish()
-	//s.Require().Nil(err)
+	err = videoService.Finish()
+	s.Require().Nil(err)
 }
