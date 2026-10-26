@@ -9,8 +9,9 @@ services:
   gcs-emulator:
     image: fsouza/fake-gcs-server:latest
     container_name: gcs-emulator
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     ports:
       - "4443:4443"
     volumes:
       - ./storage-data:/data
-    command: -scheme http -port 4443 -backend filesystem
+    command: -scheme http -port 4443 -backend filesystem -filesystem-root /data
