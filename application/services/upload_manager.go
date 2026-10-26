@@ -4,9 +4,11 @@ import (
 	"context"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/option"
 )
 
 type VideoUpload struct {
@@ -39,4 +41,39 @@ func (vu *VideoUpload) UploadObject(objectPath string, client *storage.Client, c
 	}
 
 	return nil
+}
+
+func (vu *VideoUpload) loadPaths() error {
+	err := filepath.Walk(vu.VideoPath, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			vu.Paths = append(vu.Paths, path)
+		}
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getClientUpload() (*storage.Client, context.Context, error) {
+	var err error
+	var client *storage.Client
+
+	ctx := context.Background()
+	if os.Getenv("STORAGE_EMULATOR_HOST") != "" {
+		client, err = storage.NewClient(ctx, option.WithoutAuthentication(), storage.WithJSONReads())
+		if err != nil {
+			return nil, nil, err
+		}
+	} else {
+		client, err = storage.NewClient(ctx)
+		if err != nil {
+			return nil, nil, err
+		}
+	}
+
+	return client, ctx, nil
 }
