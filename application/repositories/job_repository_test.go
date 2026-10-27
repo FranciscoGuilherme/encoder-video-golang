@@ -34,7 +34,7 @@ func (s *JobRepositoryTestSuite) SetupTest() {
 }
 
 func (s *JobRepositoryTestSuite) TestJobRepositoryDbInsert() {
-	job, err := domain.NewJob("output_path", "Pending", s.video)
+	job, err := domain.NewJob("output_path", s.video)
 	s.Require().Nil(err)
 
 	repoJob := repositories.JobRepositoryDb{Db: s.db}
@@ -48,12 +48,12 @@ func (s *JobRepositoryTestSuite) TestJobRepositoryDbInsert() {
 }
 
 func (s *JobRepositoryTestSuite) TestJobRepositoryDbUpdate() {
-	job, err := domain.NewJob("output_path", "Pending", s.video)
+	job, err := domain.NewJob("output_path", s.video)
 	s.Require().Nil(err)
 
 	repoJob := repositories.JobRepositoryDb{Db: s.db}
 	repoJob.Insert(job)
-	job.Status = "Complete"
+	job.Status = string(domain.JobStatusList.Completed)
 	repoJob.Update(job)
 	j, err := repoJob.Find(job.ID)
 

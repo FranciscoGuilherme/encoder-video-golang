@@ -26,7 +26,7 @@ func (s *JobTestSuite) SetupTest() {
 }
 
 func (s *JobTestSuite) TestNewJob() {
-	job, err := domain.NewJob("path", "Converted", s.video)
+	job, err := domain.NewJob("path", s.video)
 	s.Require().NotNil(job)
 	s.Require().Nil(err)
 }
