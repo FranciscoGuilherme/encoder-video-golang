@@ -27,23 +27,23 @@ type JobNotificationError struct {
 }
 
 type JobManagerInitParameters struct {
-	db               *gorm.DB
-	rabbitMQ         *queue.RabbitMQ
-	jobReturnChannel chan JobWorkerResult
-	messageChannel   chan amqp.Delivery
+	Db               *gorm.DB
+	RabbitMQ         *queue.RabbitMQ
+	JobReturnChannel chan JobWorkerResult
+	MessageChannel   chan amqp.Delivery
 }
 
 func NewJobManager(data JobManagerInitParameters) *JobManager {
 	return &JobManager{
-		Db:               data.db,
+		Db:               data.Db,
 		Domain:           domain.Job{},
-		MessageChannel:   data.messageChannel,
-		JobReturnChannel: data.jobReturnChannel,
-		RabbitMQ:         data.rabbitMQ,
+		MessageChannel:   data.MessageChannel,
+		JobReturnChannel: data.JobReturnChannel,
+		RabbitMQ:         data.RabbitMQ,
 	}
 }
 
-func (j *JobManager) Start(ch *amqp.Channel) {
+func (j *JobManager) Start() {
 	videoService := NewVideoService()
 	videoService.VideoRepository = &repositories.VideoRepositoryDb{Db: j.Db}
 	jobService := JobService{
