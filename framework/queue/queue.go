@@ -25,7 +25,7 @@ func NewRabbitMQ() *RabbitMQ {
 	rabbitMQArgs["x-dead-letter-exchange"] = os.Getenv("RABBITMQ_DLX")
 	rabbitMQ := RabbitMQ{
 		User:              os.Getenv("RABBITMQ_DEFAULT_USER"),
-		Password:          os.Getenv("RABBITMQ_DEFAULT_PASSWORD"),
+		Password:          os.Getenv("RABBITMQ_DEFAULT_PASS"),
 		Host:              os.Getenv("RABBITMQ_DEFAULT_HOST"),
 		Port:              os.Getenv("RABBITMQ_DEFAULT_PORT"),
 		Vhost:             os.Getenv("RABBITMQ_DEFAULT_VHOST"),
