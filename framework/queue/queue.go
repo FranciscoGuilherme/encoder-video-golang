@@ -24,11 +24,11 @@ func NewRabbitMQ() *RabbitMQ {
 	rabbitMQArgs := amqp.Table{}
 	rabbitMQArgs["x-dead-letter-exchange"] = os.Getenv("RABBITMQ_DLX")
 	rabbitMQ := RabbitMQ{
-		User:              os.Getenv("RABBIT_DEFAULT_USER"),
-		Password:          os.Getenv("RABBIT_DEFAULT_PASSWORD"),
-		Host:              os.Getenv("RABBIT_DEFAULT_HOST"),
-		Port:              os.Getenv("RABBIT_DEFAULT_PORT"),
-		Vhost:             os.Getenv("RABBIT_DEFAULT_VHOST"),
+		User:              os.Getenv("RABBITMQ_DEFAULT_USER"),
+		Password:          os.Getenv("RABBITMQ_DEFAULT_PASSWORD"),
+		Host:              os.Getenv("RABBITMQ_DEFAULT_HOST"),
+		Port:              os.Getenv("RABBITMQ_DEFAULT_PORT"),
+		Vhost:             os.Getenv("RABBITMQ_DEFAULT_VHOST"),
 		ConsumerQueueName: os.Getenv("RABBITMQ_CONSUMER_QUEUE_NAME"),
 		ConsumerName:      os.Getenv("RABBITMQ_CONSUMER_NAME"),
 		AutoAck:           false,
