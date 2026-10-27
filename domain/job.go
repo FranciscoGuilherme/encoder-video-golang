@@ -7,6 +7,30 @@ import (
 	"github.com/asaskevich/govalidator"
 )
 
+type JobStatus string
+
+type AvailableStatus struct {
+	Starting    JobStatus
+	Downloading JobStatus
+	Fragmenting JobStatus
+	Encoding    JobStatus
+	Finishing   JobStatus
+	Completed   JobStatus
+	Uploading   JobStatus
+	Failed      JobStatus
+}
+
+var JobStatusList = AvailableStatus{
+	Starting:    JobStatus("STARTING"),
+	Downloading: JobStatus("DOWNLOADING"),
+	Fragmenting: JobStatus("FRAGMENTING"),
+	Encoding:    JobStatus("ENCODING"),
+	Finishing:   JobStatus("FINISHING"),
+	Completed:   JobStatus("COMPLETED"),
+	Uploading:   JobStatus("UPLOADING"),
+	Failed:      JobStatus("FAILED"),
+}
+
 type Job struct {
 	ID               string    `json:"job_id"             valid:"uuid"      gorm:"type:uuid;primary_key"`
 	OutputBucketPath string    `json:"output_bucket_path" valid:"notnull"`
@@ -22,10 +46,10 @@ func init() {
 	govalidator.SetFieldsRequiredByDefault(true)
 }
 
-func NewJob(output string, status string, video *Video) (*Job, error) {
+func NewJob(output string, video *Video) (*Job, error) {
 	job := Job{
 		OutputBucketPath: output,
-		Status:           status,
+		Status:           string(JobStatusList.Starting),
 		Video:            video,
 	}
 
