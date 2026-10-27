@@ -14,11 +14,11 @@ type JobService struct {
 	VideoService  VideoService
 }
 
-func NewJobService() JobService {
+func NewJobService(job *domain.Job, repo repositories.JobRepository, service VideoService) JobService {
 	return JobService{
-		Job:           nil,
-		JobRepository: nil,
-		VideoService:  NewVideoService(),
+		Job:           job,
+		JobRepository: repo,
+		VideoService:  service,
 	}
 }
 

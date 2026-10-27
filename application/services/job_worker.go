@@ -36,7 +36,6 @@ func JobWorker(data JobWorkerInitParameters) {
 		}
 
 		Mutex.Lock()
-		data.jobService = NewJobService()
 		err = json.Unmarshal(message.Body, &data.jobService.VideoService.Video)
 		data.jobService.VideoService.Video.ID = uuid.NewV4().String()
 		Mutex.Unlock()

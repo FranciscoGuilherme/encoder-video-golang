@@ -46,10 +46,8 @@ func NewJobManager(data JobManagerInitParameters) *JobManager {
 func (j *JobManager) Start() {
 	videoService := NewVideoService()
 	videoService.VideoRepository = &repositories.VideoRepositoryDb{Db: j.Db}
-	jobService := JobService{
-		JobRepository: repositories.JobRepositoryDb{Db: j.Db},
-		VideoService:  videoService,
-	}
+	jobRepository := repositories.JobRepositoryDb{Db: j.Db}
+	jobService := NewJobService(&j.Domain, jobRepository, videoService)
 
 	concurrency, err := strconv.Atoi(os.Getenv("CONCURRENCY_WORKERS"))
 	if err != nil {
